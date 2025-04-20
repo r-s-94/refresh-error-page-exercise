@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./supabase";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function Overview() {
   const navigation = useNavigate();
