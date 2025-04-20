@@ -3,50 +3,31 @@ import { supabase } from "./supabase";
 import { useEffect, useState } from "react";
 
 export default function Overview() {
-  const [session, setSession] = useState<string>("");
-  const [session2, setSession2] = useState<string>("");
   const navigation = useNavigate();
 
   useEffect(() => {
-    fetchSession();
-    loadSession();
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      const { data: stroredSession } = await supabase
+        .from("SupaBase-Session")
+        .select("*")
+        .order("id");
+
+      if (
+        session &&
+        stroredSession &&
+        session.access_token === stroredSession[0].Session
+      ) {
+        console.log("Check");
+        navigation("/overview");
+      }
+    };
+
     checkSession();
   }, []);
-
-  async function fetchSession() {
-    const { data, error } = await supabase.auth.getSession();
-    if (error) {
-      console.log(error);
-    } else {
-      if (data.session?.access_token) {
-        //console.log(data.session.access_token);
-        setSession(data.session.access_token);
-        //setSession(data.session);
-      }
-    }
-  }
-
-  async function loadSession() {
-    const { data } = await supabase
-      .from("SupaBase-Session")
-      .select()
-      .order("id");
-
-    if (data) {
-      //console.log(data[0].Session);
-      setSession2(data[0].Session);
-
-      //setSession(data.Session);
-    }
-  }
-
-  function checkSession() {
-    if (session2 === session) {
-      console.log("Check");
-
-      navigation("/overview");
-    }
-  }
 
   async function logOut() {
     const {} = await supabase
