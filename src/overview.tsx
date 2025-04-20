@@ -26,6 +26,8 @@ export default function Overview() {
         stroredSession2.Session &&
         session.access_token === stroredSession2.Session
       ) {
+        console.log(session.access_token);
+        console.log(stroredSession2.Session);
         console.log("Check");
         navigation("/overview");
       }
