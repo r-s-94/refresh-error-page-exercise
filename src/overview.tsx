@@ -14,12 +14,17 @@ export default function Overview() {
       const { data: stroredSession } = await supabase
         .from("SupaBase-Session")
         .select("*")
-        .order("id");
+        .order("id", { ascending: false })
+        .limit(1);
+
+      const stroredSession2 = stroredSession?.[0];
 
       if (
         session &&
         stroredSession &&
-        session.access_token === stroredSession[0].Session
+        session.access_token &&
+        stroredSession2.Session &&
+        session.access_token === stroredSession2.Session
       ) {
         console.log("Check");
         navigation("/overview");
